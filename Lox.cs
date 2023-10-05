@@ -10,11 +10,32 @@ class Lox
         }
         else if (args.Length == 1)
         {
-            //RunFile(args[0]);
+            RunFile(args[0]);
         }
         else
         {
-            //RunPrompt();
+            RunPrompt();
         }
+    }
+
+    private static void RunFile(string filename)
+    {
+        Run(File.ReadAllText(filename));
+    }
+
+    private static void RunPrompt()
+    {
+        while (true)
+        {
+            Console.Write("> ");
+            var line = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(line)) break;
+            Run(line);
+        }
+    }
+
+    private static void Run(string source)
+    {
+
     }
 }
