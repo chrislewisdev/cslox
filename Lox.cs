@@ -1,6 +1,20 @@
-﻿namespace cslox;
+﻿namespace CsLox;
+
+// Placeholder
+class Scanner
+{
+    public Scanner(string source) {}
+
+    public List<string> ScanTokens()
+    {
+        return new List<string> {"1", "2", "3"};
+    }
+}
+
 class Lox
 {
+    private static bool hadError = false;
+
     static void Main(string[] args)
     {
         if (args.Length > 1)
@@ -21,6 +35,7 @@ class Lox
     private static void RunFile(string filename)
     {
         Run(File.ReadAllText(filename));
+        if (hadError) Environment.Exit(65);
     }
 
     private static void RunPrompt()
@@ -31,11 +46,29 @@ class Lox
             var line = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(line)) break;
             Run(line);
+            hadError = false;
         }
     }
 
     private static void Run(string source)
     {
+        var scanner = new Scanner(source);
+        var tokens = scanner.ScanTokens();
 
+        foreach (var token in tokens)
+        {
+            Console.WriteLine(token);
+        }
+    }
+
+    private static void Error(int line, string message)
+    {
+        Report(line, "", message);
+    }
+
+    private static void Report(int line, string @where, string message)
+    {
+        Console.Error.WriteLine($"[line {line}] Error {@where}: {message}");
+        hadError = true;
     }
 }
