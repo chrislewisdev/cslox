@@ -1,16 +1,5 @@
 ﻿namespace CsLox;
 
-// Placeholder
-class Scanner
-{
-    public Scanner(string source) {}
-
-    public List<string> ScanTokens()
-    {
-        return new List<string> {"1", "2", "3"};
-    }
-}
-
 class Lox
 {
     private static bool hadError = false;
