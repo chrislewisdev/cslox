@@ -1,0 +1,5 @@
+// This is a comment
+(( )){} // grouping stuff
+!*+-/=<> <= == // operators
+++ "a string value"
+234 12.34 890.427
