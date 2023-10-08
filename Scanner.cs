@@ -8,6 +8,25 @@ public class Scanner
     private int current = 0;
     private int line = 1;
 
+    private static Dictionary<string, TokenType> keywords = new() {
+        { "and", TokenType.AND },
+        { "class", TokenType.CLASS },
+        { "else", TokenType.ELSE },
+        { "false", TokenType.FALSE },
+        { "for", TokenType.FOR },
+        { "fun", TokenType.FUN },
+        { "if", TokenType.IF },
+        { "nil", TokenType.NIL },
+        { "or", TokenType.OR },
+        { "print", TokenType.PRINT },
+        { "return", TokenType.RETURN },
+        { "super", TokenType.SUPER },
+        { "this", TokenType.THIS },
+        { "true", TokenType.TRUE },
+        { "var", TokenType.VAR },
+        { "while", TokenType.WHILE },
+    };
+
     private bool IsAtEnd => current >= source.Length;
 
     public Scanner(string source)
@@ -67,6 +86,16 @@ public class Scanner
         return c >= '0' && c <= '9';
     }
 
+    private bool IsAlpha(char c)
+    {
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
+    }
+
+    private bool IsAlphaNumeric(char c)
+    {
+        return IsAlpha(c) || IsDigit(c);
+    }
+
     private void ScanToken()
     {
         char c = Advance();
@@ -105,6 +134,8 @@ public class Scanner
             default:
                 if (IsDigit(c))
                     ScanNumber();
+                else if (IsAlpha(c))
+                    ScanIdentifier();
                 else
                     Lox.Error(line, "Unexpected character.");
                 break;
@@ -145,5 +176,16 @@ public class Scanner
         }
 
         AddToken(TokenType.NUMBER, double.Parse(source.Substring(start, current - start)));
+    }
+
+    private void ScanIdentifier()
+    {
+        while (IsAlphaNumeric(Peek())) Advance();
+
+        var text = source.Substring(start, current - start);
+        if (keywords.TryGetValue(text, out var type))
+            AddToken(type);
+        else
+            AddToken(TokenType.IDENTIFIER);
     }
 }
