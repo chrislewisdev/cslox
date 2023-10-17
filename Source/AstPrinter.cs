@@ -7,16 +7,16 @@ public class AstPrinter : Expr.IVisitor<string>
     public string Print(Expr expr)
         => expr.AcceptVisitor(this);
 
-    public string AcceptBinary(Expr.Binary binary)
+    public string VisitBinary(Expr.Binary binary)
         => Parenthesize(binary.Operator.Lexeme, binary.Left, binary.Right);
 
-    public string AcceptGrouping(Expr.Grouping grouping)
+    public string VisitGrouping(Expr.Grouping grouping)
         => Parenthesize("group", grouping.Expression);
 
-    public string AcceptLiteral(Expr.Literal literal) 
+    public string VisitLiteral(Expr.Literal literal) 
         => literal.Value == null ? "nil" : (literal.Value.ToString() ?? string.Empty);
 
-    public string AcceptUnary(Expr.Unary unary)
+    public string VisitUnary(Expr.Unary unary)
         => Parenthesize(unary.Operator.Lexeme, unary.Right);
 
     private string Parenthesize(string name, params Expr[] exprs)

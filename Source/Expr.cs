@@ -4,10 +4,10 @@ public abstract class Expr
 {
     public interface IVisitor<T>
     {
-		T AcceptBinary(Binary binary);
-		T AcceptGrouping(Grouping grouping);
-		T AcceptLiteral(Literal literal);
-		T AcceptUnary(Unary unary);
+		T VisitBinary(Binary binary);
+		T VisitGrouping(Grouping grouping);
+		T VisitLiteral(Literal literal);
+		T VisitUnary(Unary unary);
     }
 
     public abstract T AcceptVisitor<T>(IVisitor<T> v);
@@ -28,7 +28,7 @@ public abstract class Expr
 
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {
-            return v.AcceptBinary(this);
+            return v.VisitBinary(this);
         }
     }
 
@@ -43,7 +43,7 @@ public abstract class Expr
 
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {
-            return v.AcceptGrouping(this);
+            return v.VisitGrouping(this);
         }
     }
 
@@ -58,7 +58,7 @@ public abstract class Expr
 
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {
-            return v.AcceptLiteral(this);
+            return v.VisitLiteral(this);
         }
     }
 
@@ -75,7 +75,7 @@ public abstract class Expr
 
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {
-            return v.AcceptUnary(this);
+            return v.VisitUnary(this);
         }
     }
 

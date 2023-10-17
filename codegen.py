@@ -17,7 +17,7 @@ expressions = [f"""
 
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {{
-            return v.Accept{expr[0]}(this);
+            return v.Visit{expr[0]}(this);
         }}
     }}
 """ for expr in ast]
@@ -28,7 +28,7 @@ public abstract class Expr
 {{
     public interface IVisitor<T>
     {{
-{'\n'.join([f'\t\tT Accept{expr[0]}({expr[0]} {expr[0].lower()});' for expr in ast])}
+{'\n'.join([f'\t\tT Visit{expr[0]}({expr[0]} {expr[0].lower()});' for expr in ast])}
     }}
 
     public abstract T AcceptVisitor<T>(IVisitor<T> v);
