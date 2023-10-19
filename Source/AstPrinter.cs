@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace CsLox;
 
 public class AstPrinter : Expr.IVisitor<string>
@@ -20,17 +18,6 @@ public class AstPrinter : Expr.IVisitor<string>
         => Parenthesize(unary.Operator.Lexeme, unary.Right);
 
     private string Parenthesize(string name, params Expr[] exprs)
-    {
-        return $"({name} {string.Join(' ', exprs.Select(e => e.AcceptVisitor(this)))})";
-        // exprs.Select(e => e.AcceptVisitor(this));
-        // var builder = new StringBuilder($"({name}");
+        => $"({name} {string.Join(' ', exprs.Select(e => e.AcceptVisitor(this)))})";
 
-        // foreach (var expr in exprs)
-        // {
-        //     builder.Append($" {expr.AcceptVisitor(this)}");
-        // }
-        // builder.Append(")");
-
-        // return builder.ToString();
-    }
 }
