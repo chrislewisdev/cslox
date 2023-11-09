@@ -8,6 +8,7 @@ public abstract class Expr
 		T VisitGrouping(Grouping grouping);
 		T VisitLiteral(Literal literal);
 		T VisitUnary(Unary unary);
+		T VisitTernary(Ternary ternary);
     }
 
     public abstract T AcceptVisitor<T>(IVisitor<T> v);
@@ -49,9 +50,9 @@ public abstract class Expr
 
     public class Literal : Expr
     {
-		public object? Value { get; private set; }
+		public object Value { get; private set; }
 
-        public Literal(object? Value)
+        public Literal(object Value)
         {
 			this.Value = Value;
         }
@@ -76,6 +77,25 @@ public abstract class Expr
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {
             return v.VisitUnary(this);
+        }
+    }
+
+    public class Ternary : Expr
+    {
+		public Expr Expression { get; private set; }
+		public Expr Primary { get; private set; }
+		public Expr Secondary { get; private set; }
+
+        public Ternary(Expr Expression, Expr Primary, Expr Secondary)
+        {
+			this.Expression = Expression;
+			this.Primary = Primary;
+			this.Secondary = Secondary;
+        }
+
+        public override T AcceptVisitor<T>(IVisitor<T> v)
+        {
+            return v.VisitTernary(this);
         }
     }
 

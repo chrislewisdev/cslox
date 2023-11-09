@@ -3,6 +3,7 @@ ast = [
     ('Grouping', ['Expr Expression']),
     ('Literal', ['object Value']),
     ('Unary', ['Token Operator', 'Expr Right']),
+    ('Ternary', ['Expr Expression', 'Expr Primary', 'Expr Secondary'])
 ]
 
 expressions = [f"""

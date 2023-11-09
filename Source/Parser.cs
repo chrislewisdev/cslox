@@ -26,7 +26,34 @@ public class Parser
         }
     }
 
-    private Expr Expression() => Equality();
+    private Expr Expression()
+    {
+        var expr = Ternary();
+
+        while (Match(TokenType.COMMA))
+        {
+            var @operator = Previous();
+            var right = Ternary();
+            expr = new Expr.Binary(expr, @operator, right);
+        }
+
+        return expr;
+    }
+
+    private Expr Ternary()
+    {
+        var expr = Equality();
+
+        if (Match(TokenType.QUESTION))
+        {
+            var primary = Ternary();
+            Consume(TokenType.COLON, "Expect ':' after '?' primary");
+            var secondary = Ternary();
+            expr = new Expr.Ternary(expr, primary, secondary);
+        }
+
+        return expr;
+    }
 
     private Expr Equality()
     {
