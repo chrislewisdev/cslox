@@ -102,7 +102,7 @@ public class Parser
         if (Match(TokenType.FALSE)) return new Expr.Literal(false);
         if (Match(TokenType.NIL))   return new Expr.Literal(null);
 
-        if (Match(TokenType.NUMBER))
+        if (Match(TokenType.NUMBER, TokenType.STRING))
         {
             return new Expr.Literal(Previous().Literal);
         }

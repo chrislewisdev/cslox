@@ -48,6 +48,12 @@ class Lox
 
         if (hadError) return;
 
+        foreach (var token in tokens)
+        {
+            Console.Write($"{token} ");
+        }
+        Console.WriteLine();
+
         Console.WriteLine(new AstPrinter().Print(expression));
     }
 
