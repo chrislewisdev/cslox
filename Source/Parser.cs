@@ -85,6 +85,13 @@ public class Parser
 
     private Expr Term()
     {
+        if (Match(TokenType.PLUS, TokenType.MINUS))
+        {
+            var @operator = Previous();
+            Factor();
+            throw Error(@operator, "Unexpected binary operator without left operand.");
+        }
+
        var expr = Factor();
 
        while (Match(TokenType.PLUS, TokenType.MINUS))
