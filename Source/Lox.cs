@@ -3,6 +3,9 @@
 class Lox
 {
     private static bool hadError = false;
+    private static bool hadRuntimeError = false;
+
+    private static readonly Interpreter interpreter = new Interpreter();
 
     static void Main(string[] args)
     {
@@ -25,6 +28,7 @@ class Lox
     {
         Run(File.ReadAllText(filename));
         if (hadError) Environment.Exit(65);
+        if (hadRuntimeError) Environment.Exit(70);
     }
 
     private static void RunPrompt()
@@ -48,13 +52,13 @@ class Lox
 
         if (hadError) return;
 
-        foreach (var token in tokens)
-        {
-            Console.Write($"{token} ");
-        }
-        Console.WriteLine();
-
-        Console.WriteLine(new AstPrinter().Print(expression));
+        // foreach (var token in tokens)
+        // {
+        //     Console.Write($"{token} ");
+        // }
+        // Console.WriteLine();
+        // Console.WriteLine(new AstPrinter().Print(expression));
+        interpreter.Interpret(expression);
     }
 
     public static void Error(int line, string message)
@@ -68,6 +72,12 @@ class Lox
             Report(token.Line, " at end", message);
         else
             Report(token.Line, $"at '{token.Lexeme}'", message);
+    }
+
+    public static void RuntimeError(RuntimeError error)
+    {
+        Console.WriteLine($"{error.Message}\n [line {error.Token.Line}]");
+        hadRuntimeError = true;
     }
 
     private static void Report(int line, string @where, string message)
