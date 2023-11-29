@@ -62,10 +62,9 @@ public class Interpreter : Expr.IVisitor<object?>
                 CheckNumberOperands(binary.Operator, left, right);
                 return (double)left / (double)right;
             case TokenType.EQUAL_EQUAL:
-                // TODO: This doesn't seem to work!
-                return left == right;
+                return left?.Equals(right);
             case TokenType.BANG_EQUAL:
-                return left != right;
+                return !left?.Equals(right);
             case TokenType.GREATER:
                 CheckNumberOperands(binary.Operator, left, right);
                 return (double)left > (double)right;
