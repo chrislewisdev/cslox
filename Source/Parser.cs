@@ -14,16 +14,34 @@ public class Parser
         this.tokens = tokens;
     }
 
-    public Expr? Parse()
+    public List<Stmt> Parse()
     {
-        try
+        var statements = new List<Stmt>();
+        while (!IsAtEnd)
         {
-            return Expression();
+            statements.Add(Statement());
         }
-        catch (ParseError)
-        {
-            return null;
-        }
+        return statements;
+    }
+
+    private Stmt Statement()
+    {
+        if (Match(TokenType.PRINT)) return PrintStatement();
+        return ExpressionStatement();
+    }
+
+    private Stmt PrintStatement()
+    {
+        Expr value = Expression();
+        Consume(TokenType.SEMICOLON, "Expect ';' after value.");
+        return new Stmt.Print(value);
+    }
+
+    private Stmt ExpressionStatement()
+    {
+        Expr value = Expression();
+        Consume(TokenType.SEMICOLON, "Expect ';' after value.");
+        return new Stmt.Expression(value);
     }
 
     private Expr Expression() => Equality();

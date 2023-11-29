@@ -43,6 +43,6 @@ define_ast("Expr", [
 ])
 
 define_ast("Stmt", [
-    ('Expression', ['Expr expression']),
-    ('Print', ['Expr expression']),
+    ('Expression', ['Expr Subject']),
+    ('Print', ['Expr Subject']),
 ])

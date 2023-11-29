@@ -1,6 +1,6 @@
 namespace CsLox;
 
-public class Interpreter : Expr.IVisitor<object?>
+public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
 {
     public void Interpret(Expr expression)
     {
@@ -13,6 +13,19 @@ public class Interpreter : Expr.IVisitor<object?>
         {
             Lox.RuntimeError(e);
         }
+    }
+
+    public object? VisitExpression(Stmt.Expression expression)
+    {
+        Evaluate(expression.Subject);
+        return null;
+    }
+
+    public object? VisitPrint(Stmt.Print print)
+    {
+        var result = Evaluate(print.Subject);
+        Console.WriteLine(Stringify(result));
+        return null;
     }
 
     public object? VisitLiteral(Expr.Literal literal) => literal.Value;

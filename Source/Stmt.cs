@@ -13,11 +13,11 @@ public abstract class Stmt
     
     public class Expression : Stmt
     {
-		public Expr expression { get; private set; }
+		public Expr Subject { get; private set; }
 
-        public Expression(Expr expression)
+        public Expression(Expr Subject)
         {
-			this.expression = expression;
+			this.Subject = Subject;
         }
 
         public override T AcceptVisitor<T>(IVisitor<T> v)
@@ -28,11 +28,11 @@ public abstract class Stmt
 
     public class Print : Stmt
     {
-		public Expr expression { get; private set; }
+		public Expr Subject { get; private set; }
 
-        public Print(Expr expression)
+        public Print(Expr Subject)
         {
-			this.expression = expression;
+			this.Subject = Subject;
         }
 
         public override T AcceptVisitor<T>(IVisitor<T> v)
