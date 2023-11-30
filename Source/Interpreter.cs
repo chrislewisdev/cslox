@@ -2,12 +2,14 @@ namespace CsLox;
 
 public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
 {
-    public void Interpret(Expr expression)
+    public void Interpret(List<Stmt> statements)
     {
         try
         {
-            object @value = Evaluate(expression);
-            Console.WriteLine(Stringify(@value));
+            foreach (var stmt in statements)
+            {
+                Execute(stmt);
+            }
         }
         catch (RuntimeError e)
         {
@@ -94,6 +96,8 @@ public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
                 return null;
         }
     }
+
+    private void Execute(Stmt stmt) => stmt.AcceptVisitor(this);
 
     private object Evaluate(Expr expr) => expr.AcceptVisitor(this);
 

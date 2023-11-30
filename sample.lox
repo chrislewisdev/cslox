@@ -1,7 +1,5 @@
 // This is a comment
-(( )){} // grouping stuff
-!*+-/=<> <= == // operators
-++ "a string value"
-234 12.34 890.427
-var1 var2 23something snake_case_identifier
-and or class fun orchid 89or
+print "one";
+print true;
+print 1 + 2;
+print (4 / 2) == (2 * 1);

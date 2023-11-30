@@ -48,7 +48,7 @@ class Lox
         var scanner = new Scanner(source);
         var tokens = scanner.ScanTokens();
         var parser = new Parser(tokens);
-        var expression = parser.Parse();
+        var statements = parser.Parse();
 
         if (hadError) return;
 
@@ -58,7 +58,7 @@ class Lox
         // }
         // Console.WriteLine();
         // Console.WriteLine(new AstPrinter().Print(expression));
-        interpreter.Interpret(expression);
+        interpreter.Interpret(statements);
     }
 
     public static void Error(int line, string message)
