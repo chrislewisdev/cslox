@@ -8,6 +8,7 @@ public abstract class Expr
 		T VisitGrouping(Grouping grouping);
 		T VisitLiteral(Literal literal);
 		T VisitUnary(Unary unary);
+		T VisitVariable(Variable variable);
     }
 
     public abstract T AcceptVisitor<T>(IVisitor<T> v);
@@ -76,6 +77,21 @@ public abstract class Expr
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {
             return v.VisitUnary(this);
+        }
+    }
+
+    public class Variable : Expr
+    {
+		public Token Name { get; private set; }
+
+        public Variable(Token Name)
+        {
+			this.Name = Name;
+        }
+
+        public override T AcceptVisitor<T>(IVisitor<T> v)
+        {
+            return v.VisitVariable(this);
         }
     }
 

@@ -40,9 +40,11 @@ define_ast("Expr", [
     ('Grouping', ['Expr Expression']),
     ('Literal', ['object? Value']),
     ('Unary', ['Token Operator', 'Expr Right']),
+    ('Variable', ['Token Name']),
 ])
 
 define_ast("Stmt", [
     ('Expression', ['Expr Subject']),
     ('Print', ['Expr Subject']),
+    ('Variable', ['Token Name', 'Expr Initialiser']),
 ])

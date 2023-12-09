@@ -12,7 +12,7 @@ class Lox
         if (args.Length > 1)
         {
             Console.WriteLine("Usage: cslox [script]");
-            Environment.Exit(64);
+            System.Environment.Exit(64);
         }
         else if (args.Length == 1)
         {
@@ -27,8 +27,8 @@ class Lox
     private static void RunFile(string filename)
     {
         Run(File.ReadAllText(filename));
-        if (hadError) Environment.Exit(65);
-        if (hadRuntimeError) Environment.Exit(70);
+        if (hadError) System.Environment.Exit(65);
+        if (hadRuntimeError) System.Environment.Exit(70);
     }
 
     private static void RunPrompt()

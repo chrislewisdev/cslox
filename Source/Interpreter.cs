@@ -2,6 +2,8 @@ namespace CsLox;
 
 public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
 {
+    private Environment environment = new();
+
     public void Interpret(List<Stmt> statements)
     {
         try
@@ -30,7 +32,21 @@ public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
         return null;
     }
 
+    public object? VisitVariable(Stmt.Variable variable)
+    {
+        object @value = null;
+        if (variable.Initialiser != null)
+        {
+            @value = Evaluate(variable.Initialiser);
+        }
+
+        environment.Define(variable.Name.Lexeme, @value);
+        return null;
+    }
+
     public object? VisitLiteral(Expr.Literal literal) => literal.Value;
+
+    public object? VisitVariable(Expr.Variable variable) => environment.Get(variable.Name);
 
     public object VisitGrouping(Expr.Grouping grouping) => Evaluate(grouping.Expression);
 
