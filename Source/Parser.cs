@@ -32,7 +32,7 @@ public class Parser
 
             return Statement();
         }
-        catch (ParseError e)
+        catch (ParseError)
         {
             Synchronise();
             return null;

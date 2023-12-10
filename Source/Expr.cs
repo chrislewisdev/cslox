@@ -50,9 +50,9 @@ public abstract class Expr
 
     public class Literal : Expr
     {
-		public object? Value { get; private set; }
+		public object Value { get; private set; }
 
-        public Literal(object? Value)
+        public Literal(object Value)
         {
 			this.Value = Value;
         }

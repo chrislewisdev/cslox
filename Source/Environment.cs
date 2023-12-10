@@ -16,7 +16,7 @@ public class Environment
 
     public void Define(string name, object @value)
     {
-        values.Add(name, @value);
+        values[name] = @value;
     }
 }
 

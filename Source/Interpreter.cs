@@ -1,6 +1,6 @@
 namespace CsLox;
 
-public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
+public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
 {
     private Environment environment = new();
 
@@ -19,20 +19,20 @@ public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
         }
     }
 
-    public object? VisitExpression(Stmt.Expression expression)
+    public object VisitExpression(Stmt.Expression expression)
     {
         Evaluate(expression.Subject);
         return null;
     }
 
-    public object? VisitPrint(Stmt.Print print)
+    public object VisitPrint(Stmt.Print print)
     {
         var result = Evaluate(print.Subject);
         Console.WriteLine(Stringify(result));
         return null;
     }
 
-    public object? VisitVariable(Stmt.Variable variable)
+    public object VisitVariable(Stmt.Variable variable)
     {
         object @value = null;
         if (variable.Initialiser != null)
@@ -44,13 +44,13 @@ public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
         return null;
     }
 
-    public object? VisitLiteral(Expr.Literal literal) => literal.Value;
+    public object VisitLiteral(Expr.Literal literal) => literal.Value;
 
-    public object? VisitVariable(Expr.Variable variable) => environment.Get(variable.Name);
+    public object VisitVariable(Expr.Variable variable) => environment.Get(variable.Name);
 
     public object VisitGrouping(Expr.Grouping grouping) => Evaluate(grouping.Expression);
 
-    public object? VisitUnary(Expr.Unary unary)
+    public object VisitUnary(Expr.Unary unary)
     {
         object right = Evaluate(unary.Right);
 
@@ -66,7 +66,7 @@ public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
         }
     }
 
-    public object? VisitBinary(Expr.Binary binary)
+    public object VisitBinary(Expr.Binary binary)
     {
         object left = Evaluate(binary.Left);
         object right = Evaluate(binary.Right);
@@ -117,7 +117,7 @@ public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
 
     private object Evaluate(Expr expr) => expr.AcceptVisitor(this);
 
-    private bool IsTruthy(object? @value) => @value switch
+    private bool IsTruthy(object @value) => @value switch
     {
         null => false,
         false => false,
@@ -136,7 +136,7 @@ public class Interpreter : Expr.IVisitor<object?>, Stmt.IVisitor<object?>
         throw new RuntimeError(@operator, "Operand must be a number.");
     }
 
-    private string Stringify(object? @value)
+    private string Stringify(object @value)
     {
         if (@value == null) return "nil";
 
