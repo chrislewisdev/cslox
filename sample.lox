@@ -1,8 +1,15 @@
 // This is a comment
 var a = 1;
-var b = 2;
-print "a + b = ";
+var b = 5 * a;
+print "a is";
+print a;
+print "and b is";
+print b;
+print "so a + b =";
 print a + b;
-print "one";
-print true;
+a = b * 3;
+print "now a is";
+print a;
+print "so a + b =";
+print a + b;
 print (4 / 2) == (2 * 1);

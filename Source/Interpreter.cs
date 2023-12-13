@@ -44,6 +44,13 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         return null;
     }
 
+    public object VisitAssign(Expr.Assign assign)
+    {
+        object @value = Evaluate(assign.NewValue);
+        environment.Assign(assign.Name, @value);
+        return @value;
+    }
+
     public object VisitLiteral(Expr.Literal literal) => literal.Value;
 
     public object VisitVariable(Expr.Variable variable) => environment.Get(variable.Name);

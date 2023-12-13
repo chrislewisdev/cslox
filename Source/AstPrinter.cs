@@ -5,6 +5,9 @@ public class AstPrinter : Expr.IVisitor<string>
     public string Print(Expr expr)
         => expr.AcceptVisitor(this);
 
+    public string VisitAssign(Expr.Assign assign)
+        => Parenthesize(assign.Name.Lexeme, assign.NewValue);
+
     public string VisitBinary(Expr.Binary binary)
         => Parenthesize(binary.Operator.Lexeme, binary.Left, binary.Right);
 

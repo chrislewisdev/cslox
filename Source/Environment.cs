@@ -18,5 +18,16 @@ public class Environment
     {
         values[name] = @value;
     }
+
+    public void Assign(Token name, object @value)
+    {
+        if (values.ContainsKey(name.Lexeme))
+        {
+            values[name.Lexeme] = @value;
+            return;
+        }
+
+        throw new RuntimeError(name, $"Assigning to undefined variable {name.Lexeme}");
+    }
 }
 

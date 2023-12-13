@@ -1,3 +1,5 @@
+# For some reason, this requires Python 3.12 to run
+
 def define_ast(name, ast):
     classes = [f"""
     public class {definition[0]} : {name}
@@ -36,6 +38,7 @@ public abstract class {name}
     return
 
 define_ast("Expr", [
+    ('Assign', ['Token Name', 'Expr NewValue']),
     ('Binary', ['Expr Left', 'Token Operator', 'Expr Right']),
     ('Grouping', ['Expr Expression']),
     ('Literal', ['object Value']),
