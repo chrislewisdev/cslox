@@ -2,7 +2,15 @@ namespace CsLox;
 
 public class Environment
 {
+    private readonly Environment enclosing = null;
     private readonly Dictionary<string, object> values = new();
+
+    public Environment() {}
+
+    public Environment(Environment enclosing)
+    {
+        this.enclosing = enclosing;
+    }
 
     public object Get(Token name)
     {
@@ -10,6 +18,8 @@ public class Environment
         {
             return values[name.Lexeme];
         }
+
+        if (enclosing != null) return enclosing.Get(name);
 
         throw new RuntimeError(name, $"Undefined variable {name.Lexeme}.");
     }
@@ -24,6 +34,12 @@ public class Environment
         if (values.ContainsKey(name.Lexeme))
         {
             values[name.Lexeme] = @value;
+            return;
+        }
+
+        if (enclosing != null)
+        {
+            enclosing.Assign(name, @value);
             return;
         }
 

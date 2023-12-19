@@ -47,6 +47,7 @@ define_ast("Expr", [
 ])
 
 define_ast("Stmt", [
+    ('Block', ['List<Stmt> Statements']),
     ('Expression', ['Expr Subject']),
     ('Print', ['Expr Subject']),
     ('Variable', ['Token Name', 'Expr Initialiser']),

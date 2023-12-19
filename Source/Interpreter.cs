@@ -32,6 +32,12 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         return null;
     }
 
+    public object VisitBlock(Stmt.Block block)
+    {
+        ExecuteBlock(block.Statements, new Environment(environment));
+        return null;
+    }
+
     public object VisitVariable(Stmt.Variable variable)
     {
         object @value = null;
@@ -123,6 +129,23 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
     private void Execute(Stmt stmt) => stmt.AcceptVisitor(this);
 
     private object Evaluate(Expr expr) => expr.AcceptVisitor(this);
+
+    private void ExecuteBlock(List<Stmt> statements, Environment environment)
+    {
+        var previousEnvironment = this.environment;
+        try
+        {
+            this.environment = environment;
+            foreach (var statement in statements)
+            {
+                Execute(statement);
+            }
+        }
+        finally
+        {
+            this.environment = previousEnvironment;
+        }
+    }
 
     private bool IsTruthy(object @value) => @value switch
     {

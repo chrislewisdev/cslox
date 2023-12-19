@@ -4,6 +4,7 @@ public abstract class Stmt
 {
     public interface IVisitor<T>
     {
+		T VisitBlock(Block block);
 		T VisitExpression(Expression expression);
 		T VisitPrint(Print print);
 		T VisitVariable(Variable variable);
@@ -12,6 +13,21 @@ public abstract class Stmt
     public abstract T AcceptVisitor<T>(IVisitor<T> v);
 
     
+    public class Block : Stmt
+    {
+		public List<Stmt> Statements { get; private set; }
+
+        public Block(List<Stmt> Statements)
+        {
+			this.Statements = Statements;
+        }
+
+        public override T AcceptVisitor<T>(IVisitor<T> v)
+        {
+            return v.VisitBlock(this);
+        }
+    }
+
     public class Expression : Stmt
     {
 		public Expr Subject { get; private set; }
