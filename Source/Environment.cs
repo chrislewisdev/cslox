@@ -2,6 +2,8 @@ namespace CsLox;
 
 public class Environment
 {
+    public class Uninitialised {}
+
     private readonly Environment enclosing = null;
     private readonly Dictionary<string, object> values = new();
 
@@ -16,7 +18,9 @@ public class Environment
     {
         if (values.ContainsKey(name.Lexeme))
         {
-            return values[name.Lexeme];
+            var @value = values[name.Lexeme];
+            if (@value is Uninitialised) throw new RuntimeError(name, $"Uninitialised variable {name.Lexeme}");
+            return @value;
         }
 
         if (enclosing != null) return enclosing.Get(name);

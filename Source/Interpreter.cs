@@ -40,7 +40,7 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
 
     public object VisitVariable(Stmt.Variable variable)
     {
-        object @value = null;
+        object @value = new Environment.Uninitialised();
         if (variable.Initialiser != null)
         {
             @value = Evaluate(variable.Initialiser);

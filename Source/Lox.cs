@@ -38,7 +38,7 @@ class Lox
             Console.Write("> ");
             var line = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(line)) break;
-            Run(line);
+            Run(line.EndsWith(";") ? line : $"{line};");
             hadError = false;
         }
     }
@@ -58,7 +58,15 @@ class Lox
         // }
         // Console.WriteLine();
         // Console.WriteLine(new AstPrinter().Print(expression));
-        interpreter.Interpret(statements);
+
+        if (statements.Count == 1 && statements.First() is Stmt.Expression expr)
+        {
+            interpreter.VisitPrint(new Stmt.Print(expr.Subject));
+        }
+        else
+        {
+            interpreter.Interpret(statements);
+        }
     }
 
     public static void Error(int line, string message)
