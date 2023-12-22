@@ -17,6 +17,9 @@ public class AstPrinter : Expr.IVisitor<string>
     public string VisitLiteral(Expr.Literal literal) 
         => literal.Value == null ? "nil" : (literal.Value.ToString() ?? string.Empty);
 
+    public string VisitLogical(Expr.Logical logical)
+        => Parenthesize(logical.Operator.Lexeme, logical.Left, logical.Right);
+
     public string VisitUnary(Expr.Unary unary)
         => Parenthesize(unary.Operator.Lexeme, unary.Right);
 

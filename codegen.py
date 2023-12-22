@@ -42,6 +42,7 @@ define_ast("Expr", [
     ('Binary', ['Expr Left', 'Token Operator', 'Expr Right']),
     ('Grouping', ['Expr Expression']),
     ('Literal', ['object Value']),
+    ('Logical', ['Expr Left', 'Token Operator', 'Expr Right']),
     ('Unary', ['Token Operator', 'Expr Right']),
     ('Variable', ['Token Name']),
 ])

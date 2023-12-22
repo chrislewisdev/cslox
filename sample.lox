@@ -6,6 +6,8 @@ if (a == b) {
 } else {
     print "a is not equal to b";
 }
+print "hi" or 2;
+print nil or "yes";
 print "a is";
 print a;
 print "and b is";

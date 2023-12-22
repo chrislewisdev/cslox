@@ -69,6 +69,22 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
 
     public object VisitLiteral(Expr.Literal literal) => literal.Value;
 
+    public object VisitLogical(Expr.Logical logical)
+    {
+        var left = Evaluate(logical.Left);
+
+        if (logical.Operator.Type == TokenType.OR)
+        {
+            if (IsTruthy(left)) return left;
+        }
+        else
+        {
+            if (!IsTruthy(left)) return left;
+        }
+
+        return Evaluate(logical.Right);
+    }
+
     public object VisitVariable(Expr.Variable variable) => environment.Get(variable.Name);
 
     public object VisitGrouping(Expr.Grouping grouping) => Evaluate(grouping.Expression);
