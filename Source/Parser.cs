@@ -55,11 +55,62 @@ public class Parser
 
     private Stmt Statement()
     {
+        if (Match(TokenType.FOR)) return ForStatement();
         if (Match(TokenType.IF)) return IfCheckStatement();
         if (Match(TokenType.PRINT)) return PrintStatement();
         if (Match(TokenType.WHILE)) return WhileStatement();
         if (Match(TokenType.LEFT_BRACE)) return Block();
         return ExpressionStatement();
+    }
+
+    private Stmt ForStatement()
+    {
+        Consume(TokenType.LEFT_PAREN, "Expect '(' after for.");
+        
+        Stmt initialiser = null;
+        if (!Match(TokenType.SEMICOLON))
+        {
+            if (Match(TokenType.VAR))
+            {
+                initialiser = VarDeclaration();
+            }
+            else
+            {
+                initialiser = ExpressionStatement();
+            }
+        }
+
+        Expr condition = null;
+        if (!Check(TokenType.SEMICOLON))
+        {
+            condition = Expression();
+        }
+        Consume(TokenType.SEMICOLON, "Expect ';' after for condition.");
+
+        Expr increment = null;
+        if (!Check(TokenType.RIGHT_PAREN))
+        {
+            increment = Expression();
+        }
+
+        Consume(TokenType.RIGHT_PAREN, "Expect ')' after for clauses.");
+
+        var body = Statement();
+
+        if (increment != null)
+        {
+            body = new Stmt.Block(new List<Stmt> { body, new Stmt.Expression(increment) });
+        }
+
+        if (condition == null) condition = new Expr.Literal(true);
+        body = new Stmt.WhileLoop(condition, body);
+
+        if (initialiser != null)
+        {
+            body = new Stmt.Block(new List<Stmt> { initialiser, body });
+        }
+
+        return body;
     }
 
     private Stmt IfCheckStatement()
@@ -83,9 +134,9 @@ public class Parser
 
     private Stmt WhileStatement()
     {
-        Consume(TokenType.LEFT_PAREN, "Expect '(' after if.");
+        Consume(TokenType.LEFT_PAREN, "Expect '(' after while.");
         var condition = Expression();
-        Consume(TokenType.RIGHT_PAREN, "Expect ')' after if condition.");
+        Consume(TokenType.RIGHT_PAREN, "Expect ')' after while condition.");
 
         var body = Statement();
 
