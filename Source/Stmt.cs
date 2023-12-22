@@ -6,6 +6,7 @@ public abstract class Stmt
     {
 		T VisitBlock(Block block);
 		T VisitExpression(Expression expression);
+		T VisitIfCheck(IfCheck ifcheck);
 		T VisitPrint(Print print);
 		T VisitVariable(Variable variable);
     }
@@ -40,6 +41,25 @@ public abstract class Stmt
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {
             return v.VisitExpression(this);
+        }
+    }
+
+    public class IfCheck : Stmt
+    {
+		public Expr Condition { get; private set; }
+		public Stmt ThenBranch { get; private set; }
+		public Stmt ElseBranch { get; private set; }
+
+        public IfCheck(Expr Condition, Stmt ThenBranch, Stmt ElseBranch)
+        {
+			this.Condition = Condition;
+			this.ThenBranch = ThenBranch;
+			this.ElseBranch = ElseBranch;
+        }
+
+        public override T AcceptVisitor<T>(IVisitor<T> v)
+        {
+            return v.VisitIfCheck(this);
         }
     }
 

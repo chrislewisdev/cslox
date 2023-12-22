@@ -25,6 +25,16 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         return null;
     }
 
+    public object VisitIfCheck(Stmt.IfCheck ifCheck)
+    {
+        if (IsTruthy(Evaluate(ifCheck.Condition))) {
+            Execute(ifCheck.ThenBranch);
+        } else if (ifCheck.ElseBranch != null) {
+            Execute(ifCheck.ElseBranch);
+        }
+        return null;
+    }
+
     public object VisitPrint(Stmt.Print print)
     {
         var result = Evaluate(print.Subject);
