@@ -53,4 +53,5 @@ define_ast("Stmt", [
     ('IfCheck', ['Expr Condition', 'Stmt ThenBranch', 'Stmt ElseBranch']),
     ('Print', ['Expr Subject']),
     ('Variable', ['Token Name', 'Expr Initialiser']),
+    ('WhileLoop', ['Expr Condition', 'Stmt Body']),
 ])

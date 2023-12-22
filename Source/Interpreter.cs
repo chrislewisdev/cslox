@@ -42,6 +42,15 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         return null;
     }
 
+    public object VisitWhileLoop(Stmt.WhileLoop whileLoop)
+    {
+        while (IsTruthy(Evaluate(whileLoop.Condition)))
+        {
+            Execute(whileLoop.Body);
+        }
+        return null;
+    }
+
     public object VisitBlock(Stmt.Block block)
     {
         ExecuteBlock(block.Statements, new Environment(environment));

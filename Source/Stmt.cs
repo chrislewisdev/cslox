@@ -9,6 +9,7 @@ public abstract class Stmt
 		T VisitIfCheck(IfCheck ifcheck);
 		T VisitPrint(Print print);
 		T VisitVariable(Variable variable);
+		T VisitWhileLoop(WhileLoop whileloop);
     }
 
     public abstract T AcceptVisitor<T>(IVisitor<T> v);
@@ -92,6 +93,23 @@ public abstract class Stmt
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {
             return v.VisitVariable(this);
+        }
+    }
+
+    public class WhileLoop : Stmt
+    {
+		public Expr Condition { get; private set; }
+		public Stmt Body { get; private set; }
+
+        public WhileLoop(Expr Condition, Stmt Body)
+        {
+			this.Condition = Condition;
+			this.Body = Body;
+        }
+
+        public override T AcceptVisitor<T>(IVisitor<T> v)
+        {
+            return v.VisitWhileLoop(this);
         }
     }
 
