@@ -2,7 +2,24 @@ namespace CsLox;
 
 public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
 {
-    private Environment environment = new();
+    private class ClockCallable : ICallable
+    {
+        public int Arity => 0;
+
+        public object Call(Interpreter interpreter, List<object> arguments)
+            => DateTimeOffset.Now.ToUnixTimeSeconds();
+
+        public override string ToString() => "<native fn>";
+    }
+
+    private readonly Environment globals = new();
+    private Environment environment;
+
+    public Interpreter()
+    {
+        environment = globals;
+        globals.Define("clock", new ClockCallable());
+    }
 
     public void Interpret(List<Stmt> statements)
     {
@@ -159,6 +176,21 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
             default:
                 return null;
         }
+    }
+
+    public object VisitCall(Expr.Call call)
+    {
+        var callee = Evaluate(call.Callee);
+        var arguments = call.Arguments.Select(x => Evaluate(x)).ToList();
+        var function = callee as ICallable
+            ?? throw new RuntimeError(call.Paren, "Can only call functions and classes.");
+
+        if (arguments.Count != function.Arity)
+        {
+            throw new RuntimeError(call.Paren, $"Expected {function.Arity} arguments but got {arguments.Count}.");
+        }
+
+        return function.Call(this, arguments);
     }
 
     private void Execute(Stmt stmt) => stmt.AcceptVisitor(this);

@@ -11,6 +11,9 @@ public class AstPrinter : Expr.IVisitor<string>
     public string VisitBinary(Expr.Binary binary)
         => Parenthesize(binary.Operator.Lexeme, binary.Left, binary.Right);
 
+    public string VisitCall(Expr.Call call)
+        => Parenthesize("call", new List<Expr>{ call.Callee }.Union(call.Arguments).ToArray());
+
     public string VisitGrouping(Expr.Grouping grouping)
         => Parenthesize("group", grouping.Expression);
 
