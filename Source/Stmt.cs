@@ -4,13 +4,14 @@ public abstract class Stmt
 {
     public interface IVisitor<T>
     {
-		T VisitBlock(Block block);
-		T VisitExpression(Expression expression);
-		T VisitFunction(Function function);
-		T VisitIfCheck(IfCheck ifcheck);
-		T VisitPrint(Print print);
-		T VisitVariable(Variable variable);
-		T VisitWhileLoop(WhileLoop whileloop);
+		T VisitBlock(Block stmt);
+		T VisitExpression(Expression stmt);
+		T VisitFunction(Function stmt);
+		T VisitIfCheck(IfCheck stmt);
+		T VisitPrint(Print stmt);
+		T VisitReturn(Return stmt);
+		T VisitVariable(Variable stmt);
+		T VisitWhileLoop(WhileLoop stmt);
     }
 
     public abstract T AcceptVisitor<T>(IVisitor<T> v);
@@ -96,6 +97,23 @@ public abstract class Stmt
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {
             return v.VisitPrint(this);
+        }
+    }
+
+    public class Return : Stmt
+    {
+		public Token Keyword { get; private set; }
+		public Expr Subject { get; private set; }
+
+        public Return(Token Keyword, Expr Subject)
+        {
+			this.Keyword = Keyword;
+			this.Subject = Subject;
+        }
+
+        public override T AcceptVisitor<T>(IVisitor<T> v)
+        {
+            return v.VisitReturn(this);
         }
     }
 

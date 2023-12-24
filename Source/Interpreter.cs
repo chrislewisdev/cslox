@@ -44,7 +44,7 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
 
     public object VisitFunction(Stmt.Function function)
     {
-        var loxFunction = new LoxFunction(function);
+        var loxFunction = new LoxFunction(function, environment);
         environment.Define(function.Name.Lexeme, loxFunction);
         return null;
     }
@@ -64,6 +64,14 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         var result = Evaluate(print.Subject);
         Console.WriteLine(Stringify(result));
         return null;
+    }
+
+    public object VisitReturn(Stmt.Return stmt)
+    {
+        object @value = null;
+        if (stmt.Subject != null) @value = Evaluate(stmt.Subject);
+
+        throw new Return(@value);
     }
 
     public object VisitWhileLoop(Stmt.WhileLoop whileLoop)

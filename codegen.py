@@ -24,7 +24,7 @@ public abstract class {name}
 {{
     public interface IVisitor<T>
     {{
-{'\n'.join([f'\t\tT Visit{definition[0]}({definition[0]} {definition[0].lower()});' for definition in ast])}
+{'\n'.join([f'\t\tT Visit{definition[0]}({definition[0]} {name.lower()});' for definition in ast])}
     }}
 
     public abstract T AcceptVisitor<T>(IVisitor<T> v);
@@ -54,6 +54,7 @@ define_ast("Stmt", [
     ('Function', ['Token Name', 'List<Token> Parameters', 'List<Stmt> Body']),
     ('IfCheck', ['Expr Condition', 'Stmt ThenBranch', 'Stmt ElseBranch']),
     ('Print', ['Expr Subject']),
+    ('Return', ['Token Keyword', 'Expr Subject']),
     ('Variable', ['Token Name', 'Expr Initialiser']),
     ('WhileLoop', ['Expr Condition', 'Stmt Body']),
 ])

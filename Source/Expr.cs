@@ -4,14 +4,14 @@ public abstract class Expr
 {
     public interface IVisitor<T>
     {
-		T VisitAssign(Assign assign);
-		T VisitBinary(Binary binary);
-		T VisitCall(Call call);
-		T VisitGrouping(Grouping grouping);
-		T VisitLiteral(Literal literal);
-		T VisitLogical(Logical logical);
-		T VisitUnary(Unary unary);
-		T VisitVariable(Variable variable);
+		T VisitAssign(Assign expr);
+		T VisitBinary(Binary expr);
+		T VisitCall(Call expr);
+		T VisitGrouping(Grouping expr);
+		T VisitLiteral(Literal expr);
+		T VisitLogical(Logical expr);
+		T VisitUnary(Unary expr);
+		T VisitVariable(Variable expr);
     }
 
     public abstract T AcceptVisitor<T>(IVisitor<T> v);
