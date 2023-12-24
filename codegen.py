@@ -51,6 +51,7 @@ define_ast("Expr", [
 define_ast("Stmt", [
     ('Block', ['List<Stmt> Statements']),
     ('Expression', ['Expr Subject']),
+    ('Function', ['Token Name', 'List<Token> Parameters', 'List<Stmt> Body']),
     ('IfCheck', ['Expr Condition', 'Stmt ThenBranch', 'Stmt ElseBranch']),
     ('Print', ['Expr Subject']),
     ('Variable', ['Token Name', 'Expr Initialiser']),

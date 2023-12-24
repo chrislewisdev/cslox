@@ -28,6 +28,7 @@ public class Parser
     {
         try
         {
+            if (Match(TokenType.FUN)) return Function("function");
             if (Match(TokenType.VAR)) return VarDeclaration();
 
             return Statement();
@@ -37,6 +38,28 @@ public class Parser
             Synchronise();
             return null;
         }
+    }
+
+    private Stmt.Function Function(string kind)
+    {
+        var name = Consume(TokenType.IDENTIFIER, $"Expect {kind} name.");
+        Consume(TokenType.LEFT_PAREN, $"Expect '(' after {kind} name.");
+
+        var parameters = new List<Token>();
+        if (!Check(TokenType.RIGHT_PAREN))
+        {
+            if (parameters.Count >= 255) Error(Peek(), "Can't have more than 255 parameters.");
+
+            do
+            {
+                parameters.Add(Consume(TokenType.IDENTIFIER, "Expect parameter name."));
+            } while(Match(TokenType.COMMA));
+        }
+        Consume(TokenType.RIGHT_PAREN, "Expect ')' after parameters.");
+
+        Consume(TokenType.LEFT_BRACE, $"Expect '{{' before {kind} body.");
+        var body = Block();
+        return new Stmt.Function(name, parameters, body);
     }
 
     private Stmt VarDeclaration()
@@ -59,7 +82,7 @@ public class Parser
         if (Match(TokenType.IF)) return IfCheckStatement();
         if (Match(TokenType.PRINT)) return PrintStatement();
         if (Match(TokenType.WHILE)) return WhileStatement();
-        if (Match(TokenType.LEFT_BRACE)) return Block();
+        if (Match(TokenType.LEFT_BRACE)) return new Stmt.Block(Block());
         return ExpressionStatement();
     }
 
@@ -143,7 +166,7 @@ public class Parser
         return new Stmt.WhileLoop(condition, body);
     }
 
-    private Stmt Block()
+    private List<Stmt> Block()
     {
         var statements = new List<Stmt>();
 
@@ -153,7 +176,7 @@ public class Parser
         }
 
         Consume(TokenType.RIGHT_BRACE, "Expect '}' after block.");
-        return new Stmt.Block(statements);
+        return statements;
     }
 
     private Stmt ExpressionStatement()

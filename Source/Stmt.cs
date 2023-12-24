@@ -6,6 +6,7 @@ public abstract class Stmt
     {
 		T VisitBlock(Block block);
 		T VisitExpression(Expression expression);
+		T VisitFunction(Function function);
 		T VisitIfCheck(IfCheck ifcheck);
 		T VisitPrint(Print print);
 		T VisitVariable(Variable variable);
@@ -42,6 +43,25 @@ public abstract class Stmt
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {
             return v.VisitExpression(this);
+        }
+    }
+
+    public class Function : Stmt
+    {
+		public Token Name { get; private set; }
+		public List<Token> Parameters { get; private set; }
+		public List<Stmt> Body { get; private set; }
+
+        public Function(Token Name, List<Token> Parameters, List<Stmt> Body)
+        {
+			this.Name = Name;
+			this.Parameters = Parameters;
+			this.Body = Body;
+        }
+
+        public override T AcceptVisitor<T>(IVisitor<T> v)
+        {
+            return v.VisitFunction(this);
         }
     }
 

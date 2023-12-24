@@ -12,13 +12,13 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         public override string ToString() => "<native fn>";
     }
 
-    private readonly Environment globals = new();
+    public readonly Environment Globals = new();
     private Environment environment;
 
     public Interpreter()
     {
-        environment = globals;
-        globals.Define("clock", new ClockCallable());
+        environment = Globals;
+        Globals.Define("clock", new ClockCallable());
     }
 
     public void Interpret(List<Stmt> statements)
@@ -39,6 +39,13 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
     public object VisitExpression(Stmt.Expression expression)
     {
         Evaluate(expression.Subject);
+        return null;
+    }
+
+    public object VisitFunction(Stmt.Function function)
+    {
+        var loxFunction = new LoxFunction(function);
+        environment.Define(function.Name.Lexeme, loxFunction);
         return null;
     }
 
@@ -197,7 +204,7 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
 
     private object Evaluate(Expr expr) => expr.AcceptVisitor(this);
 
-    private void ExecuteBlock(List<Stmt> statements, Environment environment)
+    public void ExecuteBlock(List<Stmt> statements, Environment environment)
     {
         var previousEnvironment = this.environment;
         try
