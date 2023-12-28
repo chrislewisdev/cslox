@@ -13,12 +13,18 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
     }
 
     public readonly Environment Globals = new();
+    private readonly Dictionary<Expr, int> locals = new();
     private Environment environment;
 
     public Interpreter()
     {
         environment = Globals;
         Globals.Define("clock", new ClockCallable());
+    }
+
+    public void Resolve(Expr expr, int depth)
+    {
+        locals[expr] = depth;
     }
 
     public void Interpret(List<Stmt> statements)
@@ -104,7 +110,17 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
     public object VisitAssign(Expr.Assign assign)
     {
         object @value = Evaluate(assign.NewValue);
-        environment.Assign(assign.Name, @value);
+
+        int? distance = locals.ContainsKey(assign) ? locals[assign] : null;
+        if (distance != null)
+        {
+            environment.AssignAt(distance.Value, assign.Name, @value);
+        }
+        else
+        {
+            Globals.Assign(assign.Name, @value);
+        }
+        
         return @value;
     }
 
@@ -126,7 +142,7 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         return Evaluate(logical.Right);
     }
 
-    public object VisitVariable(Expr.Variable variable) => environment.Get(variable.Name);
+    public object VisitVariable(Expr.Variable variable) => LookUpVariable(variable.Name, variable);
 
     public object VisitGrouping(Expr.Grouping grouping) => Evaluate(grouping.Expression);
 
@@ -253,5 +269,19 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         if (@value == null) return "nil";
 
         return @value.ToString() ?? string.Empty;
+    }
+
+    private object LookUpVariable(Token name, Expr expr)
+    {
+        int? distance = locals.ContainsKey(expr) ? locals[expr] : null;
+
+        if (distance != null)
+        {
+            return environment.GetAt(distance.Value, name.Lexeme);
+        }
+        else
+        {
+            return Globals.Get(name);
+        }
     }
 }

@@ -24,6 +24,11 @@ public class Environment
         throw new RuntimeError(name, $"Undefined variable {name.Lexeme}.");
     }
 
+    public object GetAt(int distance, string name)
+    {
+        return Ancestor(distance).values[name];
+    }
+
     public void Define(string name, object @value)
     {
         values[name] = @value;
@@ -44,6 +49,21 @@ public class Environment
         }
 
         throw new RuntimeError(name, $"Assigning to undefined variable {name.Lexeme}");
+    }
+
+    public void AssignAt(int distance, Token name, object @value)
+    {
+        Ancestor(distance).values[name.Lexeme] = @value;
+    }
+
+    private Environment Ancestor(int distance)
+    {
+        var environment = this;
+        for (var i = 0; i < distance; i++)
+        {
+            environment = environment.enclosing;
+        }
+        return environment;
     }
 }
 

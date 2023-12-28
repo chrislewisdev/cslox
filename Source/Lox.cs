@@ -52,6 +52,11 @@ class Lox
 
         if (hadError) return;
 
+        var resolver = new Resolver(interpreter);
+        resolver.Resolve(statements);
+
+        if (hadError) return;
+
         // foreach (var token in tokens)
         // {
         //     Console.Write($"{token} ");
