@@ -1,11 +1,12 @@
 program         -> declaration* EOF;
 
-declaration     -> funDecl | varDecl | statement;
+declaration     -> funDecl | varDecl | statement | classDecl;
 
 funDecl         -> "fun" function;
 function        -> IDENTIFIER "(" parameters? ")" block;
 parameters      -> IDENTIFIER ( "," IDENTIFIER )*;
 varDecl         -> "var" IDENTIFIER ("=" expression)? ";";
+classDecl       -> "class" IDENTIFIER "{" function* "}" ;
 
 statement       ->  exprStmt | forStmt | ifStmt | printStmt | returnStmt | whileStmt | block;
 exprStmt        ->  expression ";" ;

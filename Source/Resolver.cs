@@ -39,6 +39,13 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
         return null;
     }
 
+    public object VisitClass(Stmt.Class stmt)
+    {
+        Declare(stmt.Name);
+        Define(stmt.Name);
+        return null;
+    }
+
     public object VisitCall(Expr.Call expr)
     {
         Resolve(expr.Callee);

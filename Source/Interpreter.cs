@@ -95,6 +95,14 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         return null;
     }
 
+    public object VisitClass(Stmt.Class stmt)
+    {
+        environment.Define(stmt.Name.Lexeme, null);
+        var klass = new LoxClass(stmt.Name.Lexeme);
+        environment.Assign(stmt.Name, klass);
+        return null;
+    }
+
     public object VisitVariable(Stmt.Variable variable)
     {
         object @value = null;
