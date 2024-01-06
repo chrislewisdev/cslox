@@ -14,6 +14,9 @@ public class AstPrinter : Expr.IVisitor<string>
     public string VisitCall(Expr.Call call)
         => Parenthesize("call", new List<Expr>{ call.Callee }.Union(call.Arguments).ToArray());
 
+    public string VisitGet(Expr.Get get)
+        => Parenthesize($"get {get.Name}", get.Subject);
+
     public string VisitGrouping(Expr.Grouping grouping)
         => Parenthesize("group", grouping.Expression);
 

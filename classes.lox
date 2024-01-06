@@ -6,3 +6,6 @@ class DevonshireCream {
 
 print DevonshireCream;
 
+var tea = DevonshireCream();
+print tea;
+

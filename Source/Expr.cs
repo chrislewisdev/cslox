@@ -7,6 +7,7 @@ public abstract class Expr
 		T VisitAssign(Assign expr);
 		T VisitBinary(Binary expr);
 		T VisitCall(Call expr);
+		T VisitGet(Get expr);
 		T VisitGrouping(Grouping expr);
 		T VisitLiteral(Literal expr);
 		T VisitLogical(Logical expr);
@@ -69,6 +70,23 @@ public abstract class Expr
         public override T AcceptVisitor<T>(IVisitor<T> v)
         {
             return v.VisitCall(this);
+        }
+    }
+
+    public class Get : Expr
+    {
+		public Expr Subject { get; private set; }
+		public Token Name { get; private set; }
+
+        public Get(Expr Subject, Token Name)
+        {
+			this.Subject = Subject;
+			this.Name = Name;
+        }
+
+        public override T AcceptVisitor<T>(IVisitor<T> v)
+        {
+            return v.VisitGet(this);
         }
     }
 

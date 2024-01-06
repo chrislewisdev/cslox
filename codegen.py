@@ -41,6 +41,7 @@ define_ast("Expr", [
     ('Assign', ['Token Name', 'Expr NewValue']),
     ('Binary', ['Expr Left', 'Token Operator', 'Expr Right']),
     ('Call', ['Expr Callee', 'Token Paren', 'List<Expr> Arguments']),
+    ('Get', ['Expr Subject', 'Token Name']),
     ('Grouping', ['Expr Expression']),
     ('Literal', ['object Value']),
     ('Logical', ['Expr Left', 'Token Operator', 'Expr Right']),

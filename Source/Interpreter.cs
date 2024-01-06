@@ -232,6 +232,17 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         return function.Call(this, arguments);
     }
 
+    public object VisitGet(Expr.Get expr)
+    {
+        var subject = Evaluate(expr.Subject);
+        if (subject is LoxInstance instance)
+        {
+            return instance.Get(expr.Name);
+        }
+
+        throw new RuntimeError(expr.Name, "Only instances have properties.");
+    }
+
     private void Execute(Stmt stmt) => stmt.AcceptVisitor(this);
 
     private object Evaluate(Expr expr) => expr.AcceptVisitor(this);

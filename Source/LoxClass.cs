@@ -1,6 +1,6 @@
 namespace CsLox;
 
-public class LoxClass
+public class LoxClass : ICallable
 {
     public readonly string Name;
 
@@ -10,5 +10,12 @@ public class LoxClass
     }
 
     public override string ToString() => Name;
+
+    public int Arity => 0;
+
+    public object Call(Interpreter interpreter, List<object> arguments)
+    {
+        return new LoxInstance(this);
+    }
 }
 
