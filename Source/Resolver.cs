@@ -105,6 +105,13 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
         return null;
     }
 
+    public object VisitSet(Expr.Set expr)
+    {
+        Resolve(expr.Subject);
+        Resolve(expr.Value);
+        return null;
+    }
+
     public object VisitPrint(Stmt.Print stmt)
     {
         Resolve(stmt.Subject);

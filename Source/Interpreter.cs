@@ -150,6 +150,20 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         return Evaluate(logical.Right);
     }
 
+    public object VisitSet(Expr.Set expr)
+    {
+        var subject = Evaluate(expr.Subject);
+
+        if (subject is not LoxInstance instance)
+        {
+            throw new RuntimeError(expr.Name, "Only instances have fields.");
+        }
+
+        var @value = Evaluate(expr.Value);
+        instance.Set(expr.Name, @value);
+        return @value;
+    }
+
     public object VisitVariable(Expr.Variable variable) => LookUpVariable(variable.Name, variable);
 
     public object VisitGrouping(Expr.Grouping grouping) => Evaluate(grouping.Expression);

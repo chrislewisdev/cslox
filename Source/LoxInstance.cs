@@ -21,5 +21,10 @@ public class LoxInstance
 
         throw new RuntimeError(name, $"Undefined property '{name.Lexeme}'.");
     }
+
+    public void Set(Token name, object @value)
+    {
+        fields[name.Lexeme] = @value;
+    }
 }
 
