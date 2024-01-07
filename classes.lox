@@ -13,3 +13,5 @@ tea.x = 5;
 tea.y = 10;
 print tea.x + tea.y;
 
+print tea.serveOn();
+

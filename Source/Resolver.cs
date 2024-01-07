@@ -6,6 +6,7 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
     {
         NONE,
         FUNCTION,
+        METHOD,
     }
 
     private readonly Interpreter interpreter = new();
@@ -43,6 +44,13 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
     {
         Declare(stmt.Name);
         Define(stmt.Name);
+
+        foreach (var method in stmt.Methods)
+        {
+            var declaration = FunctionType.METHOD;
+            ResolveFunction(method, declaration);
+        }
+
         return null;
     }
 

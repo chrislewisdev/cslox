@@ -98,7 +98,15 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
     public object VisitClass(Stmt.Class stmt)
     {
         environment.Define(stmt.Name.Lexeme, null);
-        var klass = new LoxClass(stmt.Name.Lexeme);
+
+        var methods = new Dictionary<string, LoxFunction>();
+        foreach (var method in stmt.Methods)
+        {
+            var function = new LoxFunction(method, environment);
+            methods[method.Name.Lexeme] = function;
+        }
+
+        var klass = new LoxClass(stmt.Name.Lexeme, methods);
         environment.Assign(stmt.Name, klass);
         return null;
     }
