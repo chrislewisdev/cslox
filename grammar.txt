@@ -6,7 +6,7 @@ funDecl         -> "fun" function;
 function        -> IDENTIFIER "(" parameters? ")" block;
 parameters      -> IDENTIFIER ( "," IDENTIFIER )*;
 varDecl         -> "var" IDENTIFIER ("=" expression)? ";";
-classDecl       -> "class" IDENTIFIER "{" function* "}" ;
+classDecl       -> "class" IDENTIFIER ("<" IDENTIFIER)? "{" function* "}" ;
 
 statement       ->  exprStmt | forStmt | ifStmt | printStmt | returnStmt | whileStmt | block;
 exprStmt        ->  expression ";" ;

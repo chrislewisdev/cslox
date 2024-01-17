@@ -3,12 +3,14 @@ namespace CsLox;
 public class LoxClass : ICallable
 {
     public readonly string Name;
+    public readonly LoxClass Superclass;
 
     private readonly Dictionary<string, LoxFunction> methods;
 
-    public LoxClass(string name, Dictionary<string, LoxFunction> methods)
+    public LoxClass(string name, LoxClass superclass, Dictionary<string, LoxFunction> methods)
     {
         Name = name;
+        Superclass = superclass;
         this.methods = methods;
     }
 
@@ -32,6 +34,8 @@ public class LoxClass : ICallable
     public LoxFunction FindMethod(string name)
     {
         if (methods.ContainsKey(name)) return methods[name];
+
+        if (Superclass != null) return Superclass.FindMethod(name);
 
         return null;
     }

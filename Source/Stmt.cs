@@ -36,11 +36,13 @@ public abstract class Stmt
     public class Class : Stmt
     {
 		public Token Name { get; private set; }
+		public Expr.Variable Superclass { get; private set; }
 		public List<Stmt.Function> Methods { get; private set; }
 
-        public Class(Token Name, List<Stmt.Function> Methods)
+        public Class(Token Name, Expr.Variable Superclass, List<Stmt.Function> Methods)
         {
 			this.Name = Name;
+			this.Superclass = Superclass;
 			this.Methods = Methods;
         }
 
