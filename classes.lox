@@ -1,4 +1,8 @@
 class DevonshireCream {
+    init() {
+        this.flavour = "Strawberry";
+    }
+
     serveOn() {
         return "Scones";
     }

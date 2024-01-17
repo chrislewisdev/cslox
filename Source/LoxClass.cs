@@ -14,11 +14,19 @@ public class LoxClass : ICallable
 
     public override string ToString() => Name;
 
-    public int Arity => 0;
+    public int Arity => FindMethod("init")?.Arity ?? 0;
 
     public object Call(Interpreter interpreter, List<object> arguments)
     {
-        return new LoxInstance(this);
+        var instance = new LoxInstance(this);
+
+        var initialiser = FindMethod("init");
+        if (initialiser != null)
+        {
+            initialiser.Bind(instance).Call(interpreter, arguments);
+        }
+
+        return instance;
     }
 
     public LoxFunction FindMethod(string name)

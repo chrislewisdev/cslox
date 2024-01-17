@@ -7,6 +7,7 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
         NONE,
         FUNCTION,
         METHOD,
+        INITIALISER,
     }
 
     private enum ClassType
@@ -61,6 +62,7 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
         foreach (var method in stmt.Methods)
         {
             var declaration = FunctionType.METHOD;
+            if (method.Name.Lexeme == "init") declaration = FunctionType.INITIALISER;
             ResolveFunction(method, declaration);
         }
 
@@ -159,7 +161,11 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
     {
         if (currentFunction == FunctionType.NONE) Lox.Error(stmt.Keyword, "Can't return from top-level code.");
 
-        if (stmt.Subject != null) Resolve(stmt.Subject);
+        if (stmt.Subject != null) 
+        {
+            if (currentFunction == FunctionType.INITIALISER) Lox.Error(stmt.Keyword, "Can't return from a value from an initialiser.");
+            Resolve(stmt.Subject);
+        }
         return null;
     }
 

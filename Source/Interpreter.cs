@@ -50,7 +50,7 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
 
     public object VisitFunction(Stmt.Function function)
     {
-        var loxFunction = new LoxFunction(function, environment);
+        var loxFunction = new LoxFunction(function, environment, false);
         environment.Define(function.Name.Lexeme, loxFunction);
         return null;
     }
@@ -102,7 +102,7 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         var methods = new Dictionary<string, LoxFunction>();
         foreach (var method in stmt.Methods)
         {
-            var function = new LoxFunction(method, environment);
+            var function = new LoxFunction(method, environment, method.Name.Lexeme == "init");
             methods[method.Name.Lexeme] = function;
         }
 
