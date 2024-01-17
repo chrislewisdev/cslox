@@ -9,9 +9,16 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
         METHOD,
     }
 
+    private enum ClassType
+    {
+        NONE,
+        CLASS,
+    }
+
     private readonly Interpreter interpreter = new();
     private readonly Stack<Dictionary<string, bool>> scopes = new();
     private FunctionType currentFunction = FunctionType.NONE;
+    private ClassType currentClass = ClassType.NONE;
 
     public Resolver(Interpreter interpreter)
     {
@@ -42,14 +49,24 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
 
     public object VisitClass(Stmt.Class stmt)
     {
+        var enclosingClass = currentClass;
+        currentClass = ClassType.CLASS;
+
         Declare(stmt.Name);
         Define(stmt.Name);
+
+        BeginScope();
+        scopes.Peek().Add("this", true);
 
         foreach (var method in stmt.Methods)
         {
             var declaration = FunctionType.METHOD;
             ResolveFunction(method, declaration);
         }
+
+        currentClass = enclosingClass;
+
+        EndScope();;
 
         return null;
     }
@@ -117,6 +134,18 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
     {
         Resolve(expr.Subject);
         Resolve(expr.Value);
+        return null;
+    }
+
+    public object VisitThis(Expr.This expr)
+    {
+        if (currentClass == ClassType.NONE)
+        {
+            Lox.Error(expr.Keyword, "Can't use 'this' outside of a class.");
+            return null;
+        }
+
+        ResolveLocal(expr, expr.Keyword);
         return null;
     }
 

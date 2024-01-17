@@ -29,6 +29,9 @@ public class AstPrinter : Expr.IVisitor<string>
     public string VisitSet(Expr.Set set)
         => Parenthesize("set", set.Subject, set.Value);
 
+    public string VisitThis(Expr.This expr)
+        => "this";
+
     public string VisitUnary(Expr.Unary unary)
         => Parenthesize(unary.Operator.Lexeme, unary.Right);
 

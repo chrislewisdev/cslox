@@ -172,6 +172,11 @@ public class Interpreter : Expr.IVisitor<object>, Stmt.IVisitor<object>
         return @value;
     }
 
+    public object VisitThis(Expr.This expr)
+    {
+        return LookUpVariable(expr.Keyword, expr);
+    }
+
     public object VisitVariable(Expr.Variable variable) => LookUpVariable(variable.Name, variable);
 
     public object VisitGrouping(Expr.Grouping grouping) => Evaluate(grouping.Expression);

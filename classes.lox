@@ -2,6 +2,10 @@ class DevonshireCream {
     serveOn() {
         return "Scones";
     }
+
+    useThis() {
+        print this.flavour + " on " + this.serveOn();
+    }
 }
 
 print DevonshireCream;
@@ -15,3 +19,4 @@ print tea.x + tea.y;
 
 print tea.serveOn();
 
+tea.useThis();
