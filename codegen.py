@@ -47,6 +47,7 @@ define_ast("Expr", [
     ('Logical', ['Expr Left', 'Token Operator', 'Expr Right']),
     ('Set', ['Expr Subject', 'Token Name', 'Expr Value']),
     ('This', ['Token Keyword']),
+    ('Super', ['Token Keyword', 'Token Method']),
     ('Unary', ['Token Operator', 'Expr Right']),
     ('Variable', ['Token Name']),
 ])

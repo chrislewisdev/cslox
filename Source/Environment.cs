@@ -2,14 +2,14 @@ namespace CsLox;
 
 public class Environment
 {
-    private readonly Environment enclosing = null;
+    public readonly Environment Enclosing = null;
     private readonly Dictionary<string, object> values = new();
 
     public Environment() {}
 
     public Environment(Environment enclosing)
     {
-        this.enclosing = enclosing;
+        this.Enclosing = enclosing;
     }
 
     public object Get(Token name)
@@ -19,7 +19,7 @@ public class Environment
             return values[name.Lexeme];
         }
 
-        if (enclosing != null) return enclosing.Get(name);
+        if (Enclosing != null) return Enclosing.Get(name);
 
         throw new RuntimeError(name, $"Undefined variable {name.Lexeme}.");
     }
@@ -42,9 +42,9 @@ public class Environment
             return;
         }
 
-        if (enclosing != null)
+        if (Enclosing != null)
         {
-            enclosing.Assign(name, @value);
+            Enclosing.Assign(name, @value);
             return;
         }
 
@@ -61,7 +61,7 @@ public class Environment
         var environment = this;
         for (var i = 0; i < distance; i++)
         {
-            environment = environment.enclosing;
+            environment = environment.Enclosing;
         }
         return environment;
     }

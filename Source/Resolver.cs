@@ -14,6 +14,7 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
     {
         NONE,
         CLASS,
+        SUBCLASS,
     }
 
     private readonly Interpreter interpreter = new();
@@ -63,7 +64,14 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
         
         if (stmt.Superclass != null)
         {
+            currentClass = ClassType.SUBCLASS;
             Resolve(stmt.Superclass);
+        }
+
+        if (stmt.Superclass != null)
+        {
+            BeginScope();
+            scopes.Peek().Add("super", true);
         }
 
         BeginScope();
@@ -78,7 +86,9 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
 
         currentClass = enclosingClass;
 
-        EndScope();;
+        if (stmt.Superclass != null) EndScope();
+
+        EndScope();
 
         return null;
     }
@@ -146,6 +156,21 @@ public class Resolver : Expr.IVisitor<object>, Stmt.IVisitor<object>
     {
         Resolve(expr.Subject);
         Resolve(expr.Value);
+        return null;
+    }
+
+    public object VisitSuper(Expr.Super expr)
+    {
+        if (currentClass == ClassType.NONE)
+        {
+            Lox.Error(expr.Keyword, "Can't use 'super' outside of a class.");
+        }
+        else if (currentClass == ClassType.CLASS)
+        {
+            Lox.Error(expr.Keyword, "Can't use 'super' in a class with no superclass.");
+        }
+
+        ResolveLocal(expr, expr.Keyword);
         return null;
     }
 
